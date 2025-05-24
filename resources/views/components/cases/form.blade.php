@@ -4,10 +4,10 @@
     <!-- Informant Information -->
     <div class="col-md-12 mb-4">
         <h4>Informant Information</h4>
-        <div class="row">
+        <div class="row g-3">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="informant_name">Name *</label>
+                    <label for="informant_name" class="required-field">Name</label>
                     <input type="text" class="form-control @error('informant_name') is-invalid @enderror" 
                            id="informant_name" name="informant_name" 
                            value="{{ old('informant_name', $case?->informant_name) }}" required>
@@ -44,10 +44,10 @@
     <!-- Incident Information -->
     <div class="col-md-12 mb-4">
         <h4>Incident Information</h4>
-        <div class="row">
+        <div class="row g-3">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="reasons_for_reporting">Reasons for Reporting *</label>
+                    <label for="reasons_for_reporting" class="required-field">Reasons for Reporting</label>
                     <textarea class="form-control @error('reasons_for_reporting') is-invalid @enderror" 
                               id="reasons_for_reporting" name="reasons_for_reporting" rows="3" required>{{ old('reasons_for_reporting', $case?->reasons_for_reporting) }}</textarea>
                     @error('reasons_for_reporting')
@@ -57,7 +57,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="incident_date">Date *</label>
+                    <label for="incident_date" class="required-field">Date</label>
                     <input type="date" class="form-control @error('incident_date') is-invalid @enderror" 
                            id="incident_date" name="incident_date" 
                            value="{{ old('incident_date', $case?->incident_date?->format('Y-m-d')) }}" required>
@@ -68,7 +68,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="incident_time">Time *</label>
+                    <label for="incident_time" class="required-field">Time</label>
                     <input type="time" class="form-control @error('incident_time') is-invalid @enderror" 
                            id="incident_time" name="incident_time" 
                            value="{{ old('incident_time', $case?->incident_time) }}" required>
@@ -79,7 +79,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="incident_place">Place *</label>
+                    <label for="incident_place" class="required-field">Place</label>
                     <input type="text" class="form-control @error('incident_place') is-invalid @enderror" 
                            id="incident_place" name="incident_place" 
                            value="{{ old('incident_place', $case?->incident_place) }}" required>
@@ -94,7 +94,7 @@
     <!-- Suspect Information -->
     <div class="col-md-12 mb-4">
         <h4>Suspect Information</h4>
-        <div class="row">
+        <div class="row g-3">
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="suspect_name">Name</label>
@@ -167,7 +167,7 @@
     <!-- Victim Information -->
     <div class="col-md-12 mb-4">
         <h4>Victim Information</h4>
-        <div class="row">
+        <div class="row g-3">
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="victim_name">Name</label>
@@ -196,10 +196,10 @@
     <!-- Case Details -->
     <div class="col-md-12 mb-4">
         <h4>Case Details</h4>
-        <div class="row">
+        <div class="row g-3">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="incident_description">Incident Description *</label>
+                    <label for="incident_description" class="required-field">Incident Description</label>
                     <textarea class="form-control @error('incident_description') is-invalid @enderror" 
                               id="incident_description" name="incident_description" rows="4" required>{{ old('incident_description', $case?->incident_description) }}</textarea>
                     @error('incident_description')
@@ -243,10 +243,10 @@
     <!-- Case Preparation -->
     <div class="col-md-12 mb-4">
         <h4>Case Preparation</h4>
-        <div class="row">
+        <div class="row g-3">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="prepared_by">Prepared By *</label>
+                    <label for="prepared_by" class="required-field">Prepared By</label>
                     <input type="text" class="form-control @error('prepared_by') is-invalid @enderror" 
                            id="prepared_by" name="prepared_by" 
                            value="{{ old('prepared_by', $case?->prepared_by) }}" required>
@@ -257,10 +257,10 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="prepared_by_designation">Designation *</label>
+                    <label for="prepared_by_designation">Designation</label>
                     <input type="text" class="form-control @error('prepared_by_designation') is-invalid @enderror" 
                            id="prepared_by_designation" name="prepared_by_designation" 
-                           value="{{ old('prepared_by_designation', $case?->prepared_by_designation) }}" required>
+                           value="{{ old('prepared_by_designation', $case?->prepared_by_designation) }}">
                     @error('prepared_by_designation')
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
@@ -283,10 +283,10 @@
     <!-- Attachments -->
     <div class="col-md-12 mb-4">
         <h4>Attachments</h4>
-        <div class="row">
+        <div class="row g-3">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="attachments_description">Description of Attachments</label>
+                    <label for="attachments_description">Description</label>
                     <textarea class="form-control @error('attachments_description') is-invalid @enderror" 
                               id="attachments_description" name="attachments_description" rows="3">{{ old('attachments_description', $case?->attachments_description) }}</textarea>
                     @error('attachments_description')
@@ -296,4 +296,41 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
+
+<style>
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    .form-group label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+    .form-control {
+        border-color: #dee2e6;
+        padding: 0.5rem 0.75rem;
+    }
+    .form-control:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+    .invalid-feedback {
+        font-size: 0.875rem;
+        color: #dc3545;
+    }
+    .required-field::after {
+        content: " *";
+        color: #dc3545;
+    }
+    h4 {
+        color: #212529;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+    .row.g-3 {
+        margin-bottom: 1rem;
+    }
+</style> 
