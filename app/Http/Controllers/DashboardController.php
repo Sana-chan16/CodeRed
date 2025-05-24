@@ -43,6 +43,18 @@ class DashboardController extends Controller
         // Recent case activity (last 5 updates)
         $recentCases = $cases->take(5);
 
+        // Get monthly case statistics for the last 6 months
+        $monthlyStats = [];
+        $monthlyLabels = [];
+        
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $monthlyStats[] = $cases->filter(function ($case) use ($date) {
+                return $case->created_at->format('Y-m') === $date->format('Y-m');
+            })->count();
+            $monthlyLabels[] = $date->format('M Y');
+        }
+
         return view('user.dashboard', [
             'totalCases' => $totalCases,
             'activeCases' => $activeCases,
@@ -52,6 +64,8 @@ class DashboardController extends Controller
             'connectedAgencies' => $connectedAgencies,
             'riskAlerts' => $riskAlerts,
             'recentCases' => $recentCases,
+            'monthlyStats' => $monthlyStats,
+            'monthlyLabels' => $monthlyLabels,
         ]);
     }
 } 

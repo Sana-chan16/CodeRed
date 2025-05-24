@@ -3,6 +3,7 @@
 @section('content')
 <!-- Bootstrap Icons CDN -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
     body { background: #f6f8fb; }
     .sidebar {
@@ -80,6 +81,12 @@
         .sidebar { display: none; }
         .dashboard-content { margin-left: 0; }
     }
+    .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
 </style>
 <!-- Topbar (Full Width, Fixed) -->
 <div class="topbar">
@@ -135,6 +142,18 @@
             </div>
         </div>
     </div>
+    <!-- Monthly Cases Chart -->
+    <div class="card card-custom p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <div class="fw-bold fs-5">Monthly Case Reports</div>
+                <div class="text-muted small">Number of cases reported per month</div>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="monthlyCasesChart"></canvas>
+        </div>
+    </div>
     <!-- Info Cards -->
     <div class="row g-3 mb-4">
         <div class="col-md-4">
@@ -174,5 +193,74 @@
             </div>
         @endforeach
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('monthlyCasesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @json($monthlyLabels),
+                    datasets: [{
+                        label: 'Number of Cases',
+                        data: @json($monthlyStats),
+                        backgroundColor: 'rgba(13, 110, 253, 0.7)',
+                        borderColor: 'rgba(13, 110, 253, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barThickness: 30,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 13
+                            },
+                            callbacks: {
+                                label: function(context) {
+                                    return `Cases: ${context.raw}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMin: 0,
+                            suggestedMax: 100,  // Set max to 200 to make 100 appear as average
+                            ticks: {
+                                stepSize: 5,  // Show ticks every 20 units
+                                precision: 0,
+                                callback: function(value) {
+                                    return value;
+                                }
+                            },
+                            grid: {
+                                display: true,
+                                drawBorder: false,
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </div>
 @endsection
