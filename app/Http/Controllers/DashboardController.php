@@ -18,6 +18,54 @@ class DashboardController extends Controller
         $previousMonthStart = Carbon::now()->subMonth()->startOfMonth();
         $previousMonthEnd = Carbon::now()->subMonth()->endOfMonth();
 
+        // Fetch all cases for gender distribution
+        $allCases = CaseReport::all();
+        
+        // Process gender distribution
+        $genderDistribution = [
+            'male' => 0,
+            'female' => 0,
+            'other' => 0
+        ];
+
+        // Initialize monthly gender distribution array
+        $monthlyGenderDistribution = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $monthlyGenderDistribution[] = [
+                'male' => 0,
+                'female' => 0,
+                'other' => 0
+            ];
+        }
+
+        foreach ($allCases as $case) {
+            if ($case->victim_age_gender) {
+                $gender = strtolower(trim($case->victim_age_gender));
+                $monthIndex = 5 - (now()->diffInMonths($case->created_at));
+                
+                // Only process if the case is within the last 6 months
+                if ($monthIndex >= 0 && $monthIndex <= 5) {
+                    if (str_contains($gender, 'female')) {
+                        $monthlyGenderDistribution[$monthIndex]['female']++;
+                    } elseif (str_contains($gender, 'male')) {
+                        $monthlyGenderDistribution[$monthIndex]['male']++;
+                    } else {
+                        $monthlyGenderDistribution[$monthIndex]['other']++;
+                    }
+                }
+
+                // Update overall distribution
+                if (str_contains($gender, 'female')) {
+                    $genderDistribution['female']++;
+                } elseif (str_contains($gender, 'male')) {
+                    $genderDistribution['male']++;
+                } else {
+                    $genderDistribution['other']++;
+                }
+            }
+        }
+
         // Fetch cases for current and previous months
         $casesCurrentMonth = CaseReport::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->get();
         $casesPreviousMonth = CaseReport::whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->get();
@@ -59,44 +107,46 @@ class DashboardController extends Controller
         // Recent case activity (last 5 updates)
         $recentCases = CaseReport::orderBy('updated_at', 'desc')->take(5)->get();
 
-<<<<<<< HEAD
         // Get monthly case statistics for the last 6 months
         $monthlyStats = [];
         $monthlyLabels = [];
         
         for ($i = 5; $i >= 0; $i--) {
             $date = now()->subMonths($i);
-            $monthlyStats[] = $cases->filter(function ($case) use ($date) {
-                return $case->created_at->format('Y-m') === $date->format('Y-m');
-            })->count();
+            $monthlyStats[] = CaseReport::whereYear('created_at', $date->year)
+                                      ->whereMonth('created_at', $date->month)
+                                      ->count();
             $monthlyLabels[] = $date->format('M Y');
         }
+
+        // Get total cases (all time)
+        $totalCases = CaseReport::count();
+        
+        // Get active cases (current month)
+        $activeCases = $activeCasesCurrent;
+        
+        // Get resolved cases (current month)
+        $resolvedCases = $resolvedCasesCurrent;
+        
+        // Get pending review cases (current month)
+        $pendingReview = $pendingReviewCurrent;
+        
+        // Get risk alerts (high priority cases)
+        $riskAlerts = $activeInvestigationsCurrent;
 
         return view('user.dashboard', [
             'totalCases' => $totalCases,
             'activeCases' => $activeCases,
             'resolvedCases' => $resolvedCases,
             'pendingReview' => $pendingReview,
-=======
-        return view('dashboard', [
-            'totalReports' => $totalReportsCurrent,
-            'totalReportsChange' => $totalReportsChange,
-            'totalCasesCount' => $totalReportsCurrent, // Assuming Total Cases is same as Total Reports for now
-            'totalCasesChange' => $totalReportsChange, // Assuming Total Cases is same as Total Reports for now
-            'activeCasesCount' => $activeCasesCurrent,
-            'activeCasesChange' => $activeCasesChange,
-            'activeInvestigations' => $activeInvestigationsCurrent,
-            'activeInvestigationsChange' => $activeInvestigationsChange,
-            'resolvedCasesCount' => $resolvedCasesCurrent,
-            'resolvedCasesChange' => $resolvedCasesChange,
-            'pendingReviewCount' => $pendingReviewCurrent,
-            'pendingReviewChange' => $pendingReviewChange,
->>>>>>> 1ee1334b11523a00f0f4c03e7dfb44f78394fb20
             'newReportsToday' => $newReportsToday,
             'connectedAgencies' => $connectedAgencies,
             'recentCases' => $recentCases,
             'monthlyStats' => $monthlyStats,
             'monthlyLabels' => $monthlyLabels,
+            'riskAlerts' => $riskAlerts,
+            'genderDistribution' => $genderDistribution,
+            'monthlyGenderDistribution' => $monthlyGenderDistribution
         ]);
     }
 

@@ -92,8 +92,13 @@
 <div class="topbar">
     <span class="system-title">Child Protection Database System</span>
     <div class="user-info">
-        <span><i class="bi bi-person"></i> Administrator</span>
-        <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-box-arrow-right"></i> Logout</button>
+        <span><i class="bi bi-person"></i> {{ Auth::user()->name }}</span>
+        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+            @csrf
+            <button type="submit" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </button>
+        </form>
     </div>
 </div>
 <div class="sidebar">
@@ -152,6 +157,24 @@
         </div>
         <div class="chart-container">
             <canvas id="monthlyCasesChart"></canvas>
+        </div>
+    </div>
+    <!-- Gender Distribution Chart -->
+    <div class="card card-custom p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <div class="fw-bold fs-5">Victim Gender Distribution</div>
+                <div class="text-muted small">Distribution of victim gender across cases</div>
+            </div>
+            <select id="genderMonthFilter" class="form-select form-select-sm" style="width: auto;">
+                <option value="all">All Time</option>
+                @foreach($monthlyLabels as $index => $label)
+                    <option value="{{ $index }}">{{ $label }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="chart-container" style="height: 400px;">
+            <canvas id="genderChart"></canvas>
         </div>
     </div>
     <!-- Info Cards -->
@@ -238,9 +261,9 @@
                         y: {
                             beginAtZero: true,
                             suggestedMin: 0,
-                            suggestedMax: 100,  // Set max to 200 to make 100 appear as average
+                            suggestedMax: 5,  // Set max to 200 to make 100 appear as average
                             ticks: {
-                                stepSize: 5,  // Show ticks every 20 units
+                                stepSize: 0,  // Show ticks every 20 units
                                 precision: 0,
                                 callback: function(value) {
                                     return value;
@@ -259,6 +282,69 @@
                         }
                     }
                 }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('genderChart').getContext('2d');
+            const genderData = @json($genderDistribution);
+            const monthlyGenderData = @json($monthlyGenderDistribution);
+            
+            let genderChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Male', 'Female', 'Other'],
+                    datasets: [{
+                        data: [
+                            genderData.male,
+                            genderData.female,
+                            genderData.other
+                        ],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(255, 206, 86, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Distribution of Victim Gender'
+                        }
+                    }
+                }
+            });
+
+            // Handle month filter change
+            document.getElementById('genderMonthFilter').addEventListener('change', function(e) {
+                const selectedMonth = e.target.value;
+                let newData;
+                
+                if (selectedMonth === 'all') {
+                    newData = genderData;
+                } else {
+                    newData = monthlyGenderData[selectedMonth];
+                }
+
+                genderChart.data.datasets[0].data = [
+                    newData.male,
+                    newData.female,
+                    newData.other
+                ];
+                genderChart.update();
             });
         });
     </script>
