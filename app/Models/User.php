@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
         'municipality',
         'role',
+        'is_active',
+        'last_login_at',
     ];
 
     /**
@@ -40,13 +42,12 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'is_active' => 'boolean',
+        'last_login_at' => 'datetime',
+    ];
 
     /**
      * Check if user is an admin

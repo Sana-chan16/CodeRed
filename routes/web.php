@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CaseReportController;
 use App\Http\Controllers\CaseController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,4 +35,5 @@ Route::middleware('auth')->group(function () {
     
     Route::post('logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
     Route::resource('cases', CaseController::class);
+    Route::resource('users', UserController::class);
 });
