@@ -10,216 +10,256 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body {
-            background-color: #ffffff;
+            background-color: #f8f9fa;
         }
         .sidebar {
-            min-height: 100vh;
-            background-color: #ffffff;
-            padding-top: 1rem;
-            border-right: 1px solid #e9ecef;
+            position: fixed;
+            top: 64px;
+            left: 0;
+            min-height: calc(100vh - 64px);
+            height: 100%;
+            background: #fff;
+            border-right: 1px solid #000;
+            padding-top: 2rem;
+            width: 260px;
+            z-index: 1040;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background: #000;
+            color: #fff !important;
+            border-radius: 8px;
         }
         .sidebar .nav-link {
-            color: #495057;
-            padding: 0.5rem 1rem;
-            margin: 0.2rem 0;
-            border-radius: 0.25rem;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #f8f9fa;
-            color: #212529;
-        }
-        .sidebar .nav-link.active {
-            background-color: rgba(0, 0, 0, 0.05);
-            color: #212529;
+            color: #000;
             font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
         }
         .sidebar .nav-link i {
+            font-size: 1.2rem;
             margin-right: 0.5rem;
-            color: #6c757d;
         }
-        .sidebar .nav-link.active i {
-            color: #212529;
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            background: #fff;
+            border-bottom: 1px solid #000;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1050;
+        }
+        .topbar .system-title {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #000;
+        }
+        .topbar .user-info {
+            display: flex; align-items: center; gap: 1rem;
         }
         .main-content {
-            padding: 2rem;
-            background-color: #ffffff;
+            padding: 2rem 2.5rem;
+            margin-left: 260px;
+            margin-top: 80px;
         }
-        .navbar {
-            background-color: #ffffff !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,.05);
-            border-bottom: 1px solid #e9ecef;
+        .section-title { 
+            font-weight: 700; 
+            font-size: 2rem;
+            color: #000;
         }
-        .navbar-dark .navbar-brand,
-        .navbar-dark .nav-link {
-            color: #212529 !important;
+        .section-subtitle { 
+            color: #000; 
+            margin-bottom: 2rem; 
         }
-        .navbar-dark .navbar-toggler {
-            border-color: #dee2e6;
+        .card { 
+            border-radius: 12px;
+            border: 1px solid #000;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.1);
+            background: #fff;
         }
-        .navbar-dark .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(33, 37, 41, 0.75)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        .badge { 
+            font-size: 1em; 
+            font-weight: 500; 
+            padding: 0.5em 1em; 
         }
-        .card {
-            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.05);
-            border: 1px solid #e9ecef;
-            background-color: #ffffff;
+        .table { 
+            margin-bottom: 0;
+            color: #000;
         }
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .required-field::after {
-            content: " *";
-            color: #dc3545;
-        }
-        .table {
-            background-color: #ffffff;
-        }
-        .table-light {
+        .table th { 
+            font-weight: 600;
             background-color: #f8f9fa;
+            border-bottom: 2px solid #000;
+            color: #000;
         }
-        .btn-group .btn {
-            border-color: #dee2e6;
+        .table td { 
+            vertical-align: middle;
+            color: #000;
+        }
+        .btn-sm { 
+            padding: 0.25rem 0.5rem; 
+        }
+        .btn-outline-primary {
+            color: #000;
+            border-color: #000;
+        }
+        .btn-outline-primary:hover {
+            background-color: #000;
+            color: #fff;
+        }
+        .btn-dark {
+            background-color: #000;
+            border-color: #000;
+        }
+        .btn-dark:hover {
+            background-color: #000;
+            border-color: #000;
+            opacity: 0.9;
+        }
+        .btn-outline-dark {
+            color: #000;
+            border-color: #000;
+        }
+        .btn-outline-dark:hover {
+            background-color: #000;
+            color: #fff;
+        }
+        .btn-outline-secondary {
+            color: #000;
+            border-color: #000;
+        }
+        .btn-outline-secondary:hover {
+            background-color: #000;
+            color: #fff;
+        }
+        .form-control:focus {
+            border-color: #000;
+            box-shadow: 0 0 0 0.2rem rgba(0,0,0,.15);
         }
         .dropdown-menu {
-            border: 1px solid #e9ecef;
-            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.05);
-            background-color: #ffffff;
+            border: 1px solid #000;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.1);
         }
         .dropdown-item:hover {
             background-color: #f8f9fa;
+            color: #000;
         }
-        .alert {
-            border: 1px solid #e9ecef;
-            background-color: #ffffff;
+        .dropdown-item.active {
+            background-color: #000;
+            color: #fff;
+        }
+        .badge.active {
+            background-color: #000;
+            color: #fff;
+        }
+        .badge.pending {
+            background-color: #000;
+            color: #fff;
+            opacity: 0.8;
+        }
+        .badge.resolved {
+            background-color: #000;
+            color: #fff;
+            opacity: 0.6;
+        }
+        .badge.high {
+            background-color: #000;
+            color: #fff;
+        }
+        .badge.medium {
+            background-color: #000;
+            color: #fff;
+            opacity: 0.8;
+        }
+        .badge.low {
+            background-color: #000;
+            color: #fff;
+            opacity: 0.6;
         }
         .alert-success {
-            border-left: 4px solid #198754;
+            background-color: #fff;
+            border-color: #000;
+            color: #000;
         }
         .alert-danger {
-            border-left: 4px solid #dc3545;
+            background-color: #fff;
+            border-color: #000;
+            color: #000;
         }
-        .btn-close {
-            color: #212529;
-        }
-        .form-control {
-            background-color: #ffffff;
-            border-color: #dee2e6;
-        }
-        .form-control:focus {
-            background-color: #ffffff;
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-        }
-        .invalid-feedback {
-            color: #dc3545;
-        }
-        .btn {
-            font-weight: 500;
-        }
-        .btn-primary {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
-        .btn-light {
-            background-color: #f8f9fa;
-            border-color: #dee2e6;
-            color: #212529;
-        }
-        .btn-light:hover {
-            background-color: #e9ecef;
-            border-color: #dee2e6;
-            color: #212529;
+        @media (max-width: 991px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; }
         }
     </style>
 </head>
 <body>
-    <!-- Top Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('dashboard') }}">
-                <i class="bi bi-shield-check"></i> Admin Dashboard
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            {{ Auth::user()->name }}
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <form action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">Logout</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+    <!-- Topbar (Full Width, Fixed) -->
+    <div class="topbar">
+        <span class="system-title">Child Protection Database System</span>
+        <div class="user-info">
+            <span><i class="bi bi-person"></i> {{ Auth::user()->name }}</span>
+            <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                @csrf
+                <button type="submit" class="btn btn-outline-dark btn-sm">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </form>
         </div>
-    </nav>
+    </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
-                <div class="position-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                                <i class="bi bi-speedometer2"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cases.*') ? 'active' : '' }}" href="{{ route('cases.index') }}">
-                                <i class="bi bi-file-earmark-text"></i> Cases
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cases.create') ? 'active' : '' }}" href="{{ route('cases.create') }}">
-                                <i class="bi bi-plus-circle"></i> Submit Case
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="#">
-                                <i class="bi bi-people"></i> Users
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}" href="#">
-                                <i class="bi bi-gear"></i> Settings
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+    <div class="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('cases.index') ? 'active' : '' }}" href="{{ route('cases.index') }}">
+                    <i class="bi bi-file-earmark-text"></i> Cases
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('cases.create') ? 'active' : '' }}" href="{{ route('cases.create') }}">
+                    <i class="bi bi-plus-circle"></i> Submit Case
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="#">
+                    <i class="bi bi-people"></i> Users
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}" href="#">
+                    <i class="bi bi-gear"></i> Settings
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
+        @endif
 
-            <!-- Main Content -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-                @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
 
-                @if(session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-
-                @yield('content')
-            </main>
-        </div>
+        @yield('content')
     </div>
 
     <!-- Scripts -->

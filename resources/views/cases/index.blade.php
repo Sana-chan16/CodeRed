@@ -134,14 +134,9 @@
                                         <td>{{ $case->acknowledged_by ?? 'Unassigned' }}</td> {{-- Assuming acknowledged_by is assigned_to --}}
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('cases.show', $case) }}" class="btn btn-sm btn-info" title="View"><i class="fas fa-eye"></i></a>
-                                                <a href="{{ route('cases.edit', $case) }}" class="btn btn-sm btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
-                                                {{-- Delete form remains as a button for confirmation --}}
-                                                <form action="{{ route('cases.destroy', $case) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this case?')" title="Delete"><i class="fas fa-trash"></i></button>
-                                                </form>
+                                                <a href="{{ route('cases.show', $case) }}" class="btn btn-info" title="View Details">
+                                                    <i class="fas fa-eye"></i> View Details
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>

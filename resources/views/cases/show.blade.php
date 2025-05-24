@@ -7,9 +7,20 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h2>Case #{{ $case->id }}</h2>
-                    <div>
-                        <a href="{{ route('cases.edit', $case) }}" class="btn btn-warning">Edit</a>
-                        <a href="{{ route('cases.index') }}" class="btn btn-secondary">Back to List</a>
+                    <div class="btn-group">
+                        <a href="{{ route('cases.edit', $case) }}" class="btn btn-warning">
+                            <i class="bi bi-pencil"></i> Edit Case
+                        </a>
+                        <form action="{{ route('cases.destroy', $case) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this case?')">
+                                <i class="bi bi-trash"></i> Delete Case
+                            </button>
+                        </form>
+                        <a href="{{ route('cases.index') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to List
+                        </a>
                     </div>
                 </div>
 
