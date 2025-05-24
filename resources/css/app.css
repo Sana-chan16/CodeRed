@@ -1,11 +1,70 @@
-@import 'tailwindcss';
+/* Base styles */
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+/* Custom styles */
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    color: var(--dark-color);
+    background-color: #f6f8fb;
+}
+
+/* Card styles */
+.card-custom {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* Icon styles */
+.icon-circle {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Chart styles */
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+/* Status bar styles */
+.case-status-bar {
+    width: 4px;
+    height: 40px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.case-status-bar.active { background: var(--primary-color); }
+.case-status-bar.investigation { background: var(--warning-color); }
+.case-status-bar.resolved { background: var(--success-color); }
+
+/* Responsive styles */
+@media (max-width: 991px) {
+    .sidebar {
+        display: none;
+    }
+    .dashboard-content {
+        margin-left: 0;
+    }
 }

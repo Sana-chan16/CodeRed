@@ -10,8 +10,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
 Route::get('/case-management', [App\Http\Controllers\CaseReportController::class, 'index'])->name('caseManagement');
 
 Route::get('/submit-case', function () {
@@ -21,6 +19,8 @@ Route::get('/submit-case', function () {
 Route::post('/case-reports', [CaseReportController::class, 'store'])->name('caseReports.store');
 
 // Authentication Routes
+Auth::routes();
+
 Route::middleware('guest')->group(function () {
     Route::get('login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
@@ -29,11 +29,8 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-    
-    Route::post('logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
     Route::resource('cases', CaseController::class);
     Route::resource('users', UserController::class);
 });
