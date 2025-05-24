@@ -20,7 +20,7 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    protected function validator(array $data)
+    protected function validator(array $data)   
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],

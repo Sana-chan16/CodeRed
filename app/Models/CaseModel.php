@@ -16,6 +16,7 @@ class CaseModel extends Model
      * @var array<string>
      */
     protected $fillable = [
+        'user_id',
         'informant_name',
         'informant_contact_number',
         'informant_address',
@@ -51,6 +52,14 @@ class CaseModel extends Model
         'suspect_dob' => 'date',
         'involved_persons' => 'json',
     ];
+
+    /**
+     * Get the user that created the case.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     // Assuming cases can be linked to users who created or are assigned
     // public function creator(): BelongsTo

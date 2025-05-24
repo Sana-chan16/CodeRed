@@ -41,9 +41,31 @@ class CaseReportController extends Controller
         return redirect()->route('caseManagement')->with('success', 'Case submitted successfully!');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $cases = \App\Models\CaseReport::orderBy('created_at', 'desc')->get();
+        $query = CaseReport::query();
+
+        // Search functionality
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('informant_name', 'like', "%{$searchTerm}%")
+                  ->orWhere('victim_name', 'like', "%{$searchTerm}%")
+                  ->orWhere('incident_place', 'like', "%{$searchTerm}%");
+            });
+        }
+
+        // Filter by status
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Sort by created_at in descending order
+        $query->orderBy('created_at', 'desc');
+
+        // Paginate the results
+        $cases = $query->paginate(10);
+
         return view('user.caseManagement', compact('cases'));
     }
 } 

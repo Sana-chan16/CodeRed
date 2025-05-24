@@ -4,16 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\CaseModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class CaseController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of cases with search functionality.
      */
     public function index(Request $request)
     {
         $query = CaseModel::query();
+
+        // If user is not admin, only show their cases
+        if (!Auth::user()->isAdmin()) {
+            $query->where('user_id', Auth::id());
+        }
 
         // Search functionality
         if ($request->has('search')) {
@@ -81,6 +91,9 @@ class CaseController extends Controller
             'acknowledged_by' => 'nullable|string|max:255',
         ]);
 
+        // Add the user_id to the case
+        $validated['user_id'] = Auth::id();
+
         $case = CaseModel::create($validated);
 
         return redirect()->route('cases.show', $case)
@@ -92,6 +105,11 @@ class CaseController extends Controller
      */
     public function show(CaseModel $case)
     {
+        // Check if user has permission to view this case
+        if (!Auth::user()->isAdmin() && $case->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('cases.show', compact('case'));
     }
 
@@ -100,6 +118,11 @@ class CaseController extends Controller
      */
     public function edit(CaseModel $case)
     {
+        // Check if user has permission to edit this case
+        if (!Auth::user()->isAdmin() && $case->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('cases.edit', compact('case'));
     }
 
@@ -108,6 +131,11 @@ class CaseController extends Controller
      */
     public function update(Request $request, CaseModel $case)
     {
+        // Check if user has permission to update this case
+        if (!Auth::user()->isAdmin() && $case->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $validated = $request->validate([
             'informant_name' => 'required|string|max:255',
             'informant_contact_number' => 'nullable|string|max:20',
@@ -145,6 +173,11 @@ class CaseController extends Controller
      */
     public function destroy(CaseModel $case)
     {
+        // Check if user has permission to delete this case
+        if (!Auth::user()->isAdmin() && $case->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $case->delete();
 
         return redirect()->route('cases.index')
